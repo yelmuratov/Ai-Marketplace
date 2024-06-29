@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Head from 'next/head';
 import ThreeScene from "../components/Threescene";
+import Link from "next/link";
 
 const SignupForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -78,7 +79,7 @@ const SignupForm: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen bg-gray-50 bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-50">
       <Head>
         <title>Sign Up | NeuroMark</title>
         <meta name="description" content="Create an account on NeuroMark to get started with our services." />
@@ -86,7 +87,7 @@ const SignupForm: React.FC = () => {
       <div className="fixed inset-0 z-0">
         <ThreeScene />
       </div>
-      <div className="relative z-10 min-h-screen flex items-center justify-center bg-gray-50 bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-50">
+      <div className="relative z-10 min-h-screen px-4 md:px-0 top-12 flex items-center justify-center">
         <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -191,6 +192,9 @@ const SignupForm: React.FC = () => {
                 />
                 {errors.password && <p className="mt-2 text-sm text-red-600 dark:text-red-500">{errors.password}</p>}
               </div>
+              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                Already have an account <Link href="/signin" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign in</Link>
+              </p>
               <button
                 type="submit"
                 className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

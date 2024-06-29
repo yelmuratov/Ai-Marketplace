@@ -70,7 +70,7 @@ const Contact: React.FC = () => {
       <div className="fixed inset-0 z-0">
         <ThreeScene />
       </div>
-      <section className="relative z-10 px-12 py-8 lg:py-32 px-4 py-40 mx-auto max-w-screen-md ">
+      <section className="relative z-10 px-12 lg:py-32 px-4 top-24 md:top-12 mx-auto max-w-screen-md ">
         <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-white">
           Contact Us
         </h2>
