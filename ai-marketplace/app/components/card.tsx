@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image';
 
-const Card = (props: { name: string; description: string; price: string; src: string }) => {
+const Card = (props: { name: string; description: string; price: string; src: string,usable:boolean }) => {
   const model = props
   return (
     <div className="relative flex w-full max-w-[26rem] flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
@@ -38,14 +38,14 @@ const Card = (props: { name: string; description: string; price: string; src: st
         <p className="block font-sans text-base antialiased font-light leading-relaxed text-gray-700">
           {model.description}
         </p>
-        <div className="inline-flex flex-wrap items-center gap-3 mt-8 group">Price: ${model.price}</div>
+        <div className="inline-flex flex-wrap items-center gap-3 mt-8 group">Price: {Number(model.price)?`$${model.price}`:"free"}</div>
       </div>
       <div className="p-6 pt-3">
         <button
           className="block w-full select-none rounded-lg bg-gray-900 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           type="button"
         >
-          Try it now
+          {model.usable ? 'Try it now' : 'Coming soon!'}
         </button>
       </div>
     </div>

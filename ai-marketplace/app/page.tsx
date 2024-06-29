@@ -1,10 +1,8 @@
-/* eslint-disable react/no-unescaped-entities */
-// pages/index.tsx
 "use client";
 
 import Head from "next/head";
 import ThreeScene from "./components/Threescene";
-
+import toast, { Toaster } from "react-hot-toast";
 const Home: React.FC = () => {
   return (
     <div className="relative h-screen w-screen overflow-hidden">
@@ -37,9 +35,11 @@ const Home: React.FC = () => {
           A marketplace for small businesses to easily use ai tools
         </h1>
         <p className="text-sm sm:text-lg md:text-xl lg:text-xl text-center max-w-2xl">
-          Rent easy-to-use ai models to improve operations and customer service, while ai developers get paid for their creations
+          Rent easy-to-use ai models to improve operations and customer service,
+          while ai developers get paid for their creations
         </p>
       </div>
+      <Toaster position="top-center" reverseOrder={false}  />
     </div>
   );
 };

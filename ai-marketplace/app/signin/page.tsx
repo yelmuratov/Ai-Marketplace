@@ -1,12 +1,48 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Head from "next/head";
 import ThreeScene from "../components/Threescene";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
+import app from "@/config";
+import { getAuth } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { signInWithPopup,GoogleAuthProvider } from "firebase/auth";
+import { toast } from "react-hot-toast";
+
 
 const SigninForm: React.FC = () => {
+  const [user, setUser] = useState<any>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const auth = getAuth(app);
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      }else{
+        setUser(null);
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth(app);
+    try {
+      const result = await signInWithPopup(auth, provider);
+      localStorage.setItem("user", JSON.stringify(result.user));
+      toast.success('You have successfully signed in!',{duration: 3000})
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to sign in with Google!',{duration: 3000});
+    }
+  } 
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -48,7 +84,6 @@ const SigninForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      // Handle form submission logic here
       console.log(formData);
     }
   };
@@ -161,7 +196,7 @@ const SigninForm: React.FC = () => {
             </form>
             <div className="flex gap-4  justify-center flex-col">
               <button
-                onClick={() => signIn("google")}
+                onClick={signInWithGoogle}
                 className="px-4 flex items-center justify-center py-2 border flex gap-2 border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150"
               >
                 <Image

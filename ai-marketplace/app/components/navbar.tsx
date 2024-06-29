@@ -4,11 +4,33 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { getAuth, signOut} from 'firebase/auth';
+import { useRouter } from "next/navigation";
+import app from '@/config';
+import { get } from 'http';
+import toast from 'react-hot-toast';
 
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [darkBackground, setDarkBackground] = useState(true);
+  const [user, setUser] = useState<any>(null);
+
+  const router = useRouter();
+  const auth = getAuth();
+
+  useEffect(() => {
+    const auth = getAuth(app);
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return unsubscribe;
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,9 +63,22 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
+  const handleLogout =async () => {
+    try{
+      await signOut(auth)
+      localStorage.removeItem('user');
+      setUser(null);
+      router.push('/');
+      toast.success('You have successfully signed out!',{duration: 3000})
+    }catch(error){
+      console.error(error);
+      toast.error('Failed to sign out!',{duration: 3000})
+    }
+  }
+
   return (
     <nav
-      className={`fixed lg:px-40 md:px-40 w-full z-20 px-4 py-4 flex justify-between items-center transition-colors duration-300 ${
+      className={`fixed lg:px-10 w-full z-20 px-4 py-4 flex justify-between items-center transition-colors duration-300 ${
         scrolled ? 'bg-white bg-opacity-30 backdrop-blur-md border-b border-black-800' : 'bg-transparent'
       } ${darkBackground ? 'text-white' : 'text-black'}`}
     >
@@ -71,18 +106,23 @@ const Navbar: React.FC = () => {
               <Link href="/contact" className="p-4 text-sm font-semibold hover:bg-gray-100">Contact</Link>
             </div>
             <div className="mt-auto">
-              <SheetClose asChild>
-                <Link href="/signin" className="block px-4 py-3 mb-3 text-center font-semibold bg-gray-50 hover:bg-gray-100 rounded-xl">Sign In</Link>
-              </SheetClose>
-              <SheetClose asChild>
-                <Link href="/signup" className="block px-4 py-3 mb-2 text-center text-white font-semibold bg-blue-600 hover:bg-blue-700 rounded-xl">Sign Up</Link>
-              </SheetClose>
+              {user ? (
+                <div className='md:hidden block'>
+                  <strong className="font-semibold text-black block my-4 text-sm text-center">{user.displayName}</strong>
+                  <Button onClick={handleLogout} className="w-full text-sm font-semibold">Sign Out</Button>
+                </div>
+              ) : (
+                <div className="flex gap-4">
+                  <Link href="/signin" className="block w-full text-center py-2 text-sm font-semibold">Sign In</Link>
+                  <Link href="/signup" className="block w-full text-center py-2 text-sm font-semibold">Sign Up</Link>
+                </div>
+              )}
             </div>
           </SheetContent>
         </Sheet>
-      </div> 
+      </div>
       <ul
-        className={`hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6 ${
+        className={`hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-6 ${
           darkBackground ? 'text-[#8d99ae]' : 'text-[#8d99ae]'
         }`}
       >
@@ -106,12 +146,21 @@ const Navbar: React.FC = () => {
         </li>
         <li><Link href="/contact" className="text-sm font-bold hover:text-gray-500">Contact</Link></li>
       </ul>
-      <div className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold rounded-xl transition duration-200">
-        <Link href="/signin">Sign In</Link>
-      </div>
-      <div className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200">
-        <Link href="/signup">Sign Up</Link>
-      </div>
+      {user? (
+        <div className='flex item-center justify-center gap-4 hidden md:block mt-2'>
+          <strong className="font-semibold text-white text-sm ">{user.displayName}</strong>
+          <Button onClick={handleLogout} className="text-sm font-semibold ml-4">Sign Out</Button>
+        </div>
+      ) : (
+        <div className="flex gap-4 hidden md:block">
+          <div className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold rounded-xl transition duration-200">
+            <Link href="/signin">Sign In</Link>
+          </div>
+          <div className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200">
+            <Link href="/signup">Sign Up</Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
