@@ -33,12 +33,11 @@ const Home: React.FC = () => {
       </Head>
       <ThreeScene />
       <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10 pointer-events-none p-4">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-2 sm:mb-4">
-          Welcome to the AI World
+        <h1 className="text-3xl lg:w-[1000px] text-center sm:text-4xl md:text-5xl lg:text-6xl mb-2 sm:mb-4">
+          A marketplace for small businesses to easily use ai tools
         </h1>
-        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-center max-w-xl">
-          Embark on a journey of discovery with NeuroMark's innovative AI
-          solutions.
+        <p className="text-sm sm:text-lg md:text-xl lg:text-xl text-center max-w-2xl">
+          Rent easy-to-use ai models to improve operations and customer service, while ai developers get paid for their creations
         </p>
       </div>
     </div>
