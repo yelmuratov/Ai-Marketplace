@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 import Head from 'next/head';
 import Image from 'next/image';
 import ThreeScene from "../components/Threescene";
-import { useWindowSize } from "@/hooks/useWindowsize";
+import { useWindowSize } from "../../hooks/useWindowsize";
 
 const About1: React.FC = () => {
     const { width, height } = useWindowSize();

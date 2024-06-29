@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@netlify/plugin-nextjs": "^5.4.0",
     "@nextui-org/react": "^2.4.2",
     "@react-three/fiber": "^8.16.8",
     "axios": "^1.7.2",
@@ -19,7 +20,7 @@
     "three": "^0.165.0"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^20.14.9",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/three": "^0.165.0",
