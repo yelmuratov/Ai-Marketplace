@@ -54,6 +54,7 @@ const SigninForm: React.FC = () => {
   const signInGithub = async () => {
     const provider = new GithubAuthProvider();
     const auth = getAuth(app);
+  
     try {
       const result = await signInWithPopup(auth, provider);
       localStorage.setItem("user", JSON.stringify(result.user));
@@ -61,34 +62,10 @@ const SigninForm: React.FC = () => {
       router.push("/");
     } catch (error: any) {
       console.error(error);
-      if ((error as AuthError).code === "auth/account-exists-with-different-credential") {
-        const email = (error.customData as { email: string }).email;
-        const methods = await fetchSignInMethodsForEmail(auth, email);
-
-        if (methods.includes("password")) {
-          const password = prompt("An account with this email already exists. Please enter your password to link accounts:");
-          if (password) {
-            const credential = EmailAuthProvider.credential(email, password);
-            const githubCredential = GithubAuthProvider.credentialFromError(error);
-
-            try {
-              const userCredential = await signInWithEmailAndPassword(auth, email, password);
-              await linkWithCredential(userCredential.user, githubCredential as AuthCredential);
-              toast.success("Accounts linked successfully!", { duration: 3000 });
-              router.push("/");
-            } catch (linkError) {
-              console.error("Error linking accounts:", linkError);
-              toast.error("Error linking accounts!", { duration: 3000 });
-            }
-          }
-        } else {
-          toast.error("An account with this email already exists using different sign-in methods.", { duration: 3000 });
-        }
-      } else {
-        toast.error("Failed to sign in with GitHub!", { duration: 3000 });
-      }
+      toast.error("Failed to sign in with GitHub!", { duration: 3000 });
     }
-  };
+  };  
+  
 
   const [formData, setFormData] = useState({
     username: "",
