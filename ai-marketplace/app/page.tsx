@@ -2,7 +2,7 @@
 
 import Head from "next/head";
 import ThreeScene from "./components/Threescene";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 const Home: React.FC = () => {
   return (
     <div className="relative h-screen w-screen overflow-hidden">
