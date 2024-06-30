@@ -4,9 +4,8 @@ import React, { useState,useEffect } from "react";
 import Head from "next/head";
 import ThreeScene from "../components/Threescene";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
 import app from "@/config";
-import { getAuth } from "firebase/auth";
+import { GithubAuthProvider, getAuth } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { signInWithPopup,GoogleAuthProvider } from "firebase/auth";
 import { toast } from "react-hot-toast";
@@ -42,6 +41,21 @@ const SigninForm: React.FC = () => {
       toast.error('Failed to sign in with Google!',{duration: 3000});
     }
   } 
+
+  const signInGithub = async () => {
+    const provider = new GithubAuthProvider();
+    const auth = getAuth(app);
+    try {
+      const result = await signInWithPopup(auth, provider);
+      localStorage.setItem("user", JSON.stringify(result.user));
+      toast.success('You have successfully signed in!', { duration: 3000 });
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to sign in with GitHub!', { duration: 3000 });
+    }
+  };
+  
 
   const [formData, setFormData] = useState({
     username: "",
@@ -100,7 +114,7 @@ const SigninForm: React.FC = () => {
       <div className="fixed inset-0 z-0">
         <ThreeScene />
       </div>
-      <div className="relative z-10 px-4 min-h-screen flex items-center justify-center bg-gray-50 bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-50">
+      <div className="relative z-10 px-4 min-h-screen flex items-center justify-center">
         <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -208,7 +222,7 @@ const SigninForm: React.FC = () => {
                 <span>Continue with Google</span>
               </button>
               <button
-                onClick={()=>signIn("github")}
+                onClick={signInGithub}
                 type="button"
                 className="py-2 px-4 max-w-md flex justify-center items-center bg-gray-600 hover:bg-gray-700 focus:ring-gray-500 focus:ring-offset-gray-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
               >
