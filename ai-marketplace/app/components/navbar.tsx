@@ -1,15 +1,13 @@
 "use client";
 
 import Link from 'next/link';
-
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { getAuth, signOut} from 'firebase/auth';
+import { getAuth, signOut } from 'firebase/auth';
 import { useRouter } from "next/navigation";
 import app from '@/config';
-import { get } from 'http';
 import toast from 'react-hot-toast';
 
 const Navbar: React.FC = () => {
@@ -24,7 +22,10 @@ const Navbar: React.FC = () => {
     const auth = getAuth(app);
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        setUser(user);
+        setUser({
+          displayName: user.displayName,
+          email: user.email,
+        });
       } else {
         setUser(null);
       }
@@ -64,18 +65,18 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
-  const handleLogout =async () => {
-    try{
-      await signOut(auth)
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
       localStorage.removeItem('user');
       setUser(null);
       router.push('/');
-      toast.success('You have successfully signed out!',{duration: 3000})
-    }catch(error){
+      toast.success('You have successfully signed out!', { duration: 3000 });
+    } catch (error) {
       console.error(error);
-      toast.error('Failed to sign out!',{duration: 3000})
+      toast.error('Failed to sign out!', { duration: 3000 });
     }
-  }
+  };
 
   return (
     <nav
@@ -109,7 +110,7 @@ const Navbar: React.FC = () => {
             <div className="mt-auto">
               {user ? (
                 <div className='md:hidden block'>
-                  <strong className="font-semibold text-black block my-4 text-sm text-center">{user.displayName}</strong>
+                  <span className="block text-black text-sm text-center my-4">{user.email}</span>
                   <Button onClick={handleLogout} className="w-full text-sm font-semibold">Sign Out</Button>
                 </div>
               ) : (
@@ -147,9 +148,9 @@ const Navbar: React.FC = () => {
         </li>
         <li><Link href="/contact" className="text-sm font-bold hover:text-gray-500">Contact</Link></li>
       </ul>
-      {user? (
-        <div className='flex item-center justify-center gap-4 hidden md:block mt-2'>
-          <strong className="font-semibold text-white text-sm ">{user.displayName}</strong>
+      {user ? (
+        <div className='flex items-center justify-center gap-4 hidden md:block mt-2'>
+          <span className="text-white text-sm">{user.email}</span>
           <Button onClick={handleLogout} className="text-sm font-semibold ml-4">Sign Out</Button>
         </div>
       ) : (
