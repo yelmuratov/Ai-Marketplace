@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Card = (props: { name: string; description: string; price: string; src: string,usable:boolean }) => {
   const model = props
@@ -45,7 +46,7 @@ const Card = (props: { name: string; description: string; price: string; src: st
           className="block w-full select-none rounded-lg bg-gray-900 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           type="button"
         >
-          {model.usable ? 'Try it now' : 'Coming soon!'}
+          {model.usable ? <Link href='https://chatgpt.com/' target='_blank'>Try it now</Link> : 'Coming soon!'}
         </button>
       </div>
     </div>
