@@ -14,7 +14,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
-  const { setTokens, clearTokens } = useAuthStore();
+  const { setTokens, clearTokens,setUser } = useAuthStore();
 
   const handleRegister = async (username: string, email: string, password: string) => {
     await register(username, email, password);
@@ -29,6 +29,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const handleLogout = () => {
     clearTokens();
     router.push('/');
+  };
+
+  const updateTokens = (accessToken: string, refreshToken: string) => {
+    setTokens(accessToken, refreshToken);
   };
 
   return (

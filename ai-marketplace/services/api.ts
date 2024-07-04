@@ -24,3 +24,12 @@ export const login = async (username: string, password: string) => {
   const response = await axios.post(`${API_URL}/users/login/`, { username, password });
   return response.data;
 };
+
+export const userMe = async (accessToken: string) => {
+  const response = await axios.get(`${API_URL}/users/me/`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data;
+};

@@ -1,3 +1,5 @@
+'use client';
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,18 +23,43 @@ import {
 } from "@/components/ui/form";
 import { useAuth } from "@/context/auth-contex";
 import { useAuthStore, useLoginModal, useRegisterModal } from "@/stores/auth-store";
+import { useEffect, useState } from "react";
+import { userMe } from "@/services/api";
 
 interface Idata{
-    access: string;
-    refresh: string;
+    access?: string;
+    refresh?: string;
+}
+
+interface Iuser{
+    username: string;
+    email: string;
 }
 
 const LoginModal = () => {
+  const [tokens, setTokens] = useState<Idata>({access: "", refresh: ""});
   const {login:authLogin} = useAuth();
   const {isLoginModalOpen,closeLoginModal} = useLoginModal();
   const {setUser} = useAuthStore();
   const {openRegisterModal} = useRegisterModal();
-  const {clearUser} = useAuthStore();
+  const {clearUser,accessToken,refreshToken} = useAuthStore();
+
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (accessToken) {
+        try {
+          const data:Iuser = await userMe(accessToken);
+          setUser(data);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [accessToken, setUser]);
+
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -47,7 +74,6 @@ const LoginModal = () => {
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     try {
       await authLogin(values.username, values.password);
-      setUser({username: values.username, email: ""});
       closeLoginModal();
     } catch (error) {
       console.error(error);
@@ -67,7 +93,7 @@ const LoginModal = () => {
           <DialogTitle>Login</DialogTitle>
           <DialogDescription>Enter your account</DialogDescription>
         </DialogHeader>
-        <Form {...form}>
+        <Form {...form} >
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
@@ -95,7 +121,7 @@ const LoginModal = () => {
                 </FormItem>
               )}
             />
-            <div className="flex">
+            <div className="flex justify-between items-center">
                 <Button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? "Submitting..." : "Submit"}
                 </Button>

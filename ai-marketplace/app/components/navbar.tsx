@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { useLoginModal, useRegisterModal } from '../../stores/auth-store';
+import { useAuthStore, useLoginModal, useRegisterModal } from '../../stores/auth-store';
 import { useAuth } from '@/context/auth-contex';
 
 interface IState {
@@ -14,33 +14,49 @@ interface IState {
   user: { username: string; email: string };
 }
 
+
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [darkBackground, setDarkBackground] = useState(true);
-  const {logout: handleLogout} = useAuth();
-  const storedState = localStorage.getItem('auth-storage');
-  let state: IState = { accessToken: '', refreshToken: '', user: { username: '', email: '' } };
+  const [state, setState] = useState<IState>({
+    accessToken: '',
+    refreshToken: '',
+    user: { username: '', email: '' }
+  });
+  
+  const { logout: handleLogout } = useAuth();
+  const { closeRegisterModal,openRegisterModal } = useRegisterModal();
+  const { closeLoginModal } = useLoginModal();
+  const {setUser} = useAuthStore();
 
-  if (storedState) {
-    try {
-      state = JSON.parse(storedState).state as IState;
-    } catch (error) {
-      console.error('Error parsing local storage data:', error);
-    }
+  const logout = () => {
+    setState({ accessToken: '', refreshToken: '', user: { username: '', email: '' } });
+    localStorage.removeItem('auth-storage');
+    setUser({ username: '', email: '' });
+    handleLogout();
+    openRegisterModal();
   }
 
-  console.log(state);
-
-  const {closeRegisterModal} = useRegisterModal();
-  const {closeLoginModal} = useLoginModal();
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedState = localStorage.getItem('auth-storage');
+      if (storedState) {
+        try {
+          const parsedState = JSON.parse(storedState).state as IState;
+          setState(parsedState);
+        } catch (error) {
+          console.error('Error parsing local storage data:', error);
+        }
+      }
+    }
+  }, [state.accessToken, state.refreshToken]);
 
   useEffect(() => {
-    if(state.accessToken && state.refreshToken){
+    if (state.accessToken && state.refreshToken) {
       closeLoginModal();
       closeRegisterModal();
     }
-  }
-  , [state.accessToken, state.refreshToken, closeLoginModal, closeRegisterModal]);
+  }, [state.accessToken, state.refreshToken, closeLoginModal, closeRegisterModal]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -105,8 +121,10 @@ const Navbar: React.FC = () => {
             <div className="mt-auto">
               {state.user ? (
                 <div className='md:hidden block'>
-                  <span className="block text-black text-sm text-center my-4">{state.user.username}username</span>
-                  <Button onClick={handleLogout} className="w-full text-sm font-semibold">Sign Out</Button>
+                  <span className="block text-black text-sm text-center my-4">{state.user.email}</span>
+                  <SheetTrigger asChild>
+                    <Button onClick={logout} className="w-full text-center py-2 text-sm font-semibold">Logout</Button>
+                  </SheetTrigger>
                 </div>
               ) : (
                 <div className="flex gap-4">
@@ -143,6 +161,11 @@ const Navbar: React.FC = () => {
         </li>
         <li><Link href="/contact" className="text-sm font-bold hover:text-gray-500">Contact</Link></li>
       </ul>
+      {state.user && (
+                <div className='md:flex hidden items-center gap-4'>
+                  <span className="block text-white text-sm text-center my-4">{state.user.email}</span>
+                  <Button onClick={logout} className="w-full text-center py-2 text-sm font-semibold">Logout</Button>
+                </div>)}
     </nav>
   );
 };

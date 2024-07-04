@@ -1,10 +1,10 @@
 // stores/authStore.ts
-import {create} from 'zustand';
+import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface IUser {
-    username: string,
-    email: string,
+    username: string;
+    email: string;
 }
 
 interface AuthState {
@@ -29,14 +29,16 @@ interface LoginModalStore {
     closeLoginModal: () => void;
 }
 
+const isClient = typeof window !== 'undefined';
+
 export const useRegisterModal = create<RegisterModalStore>((set) => ({
-    isRegisterModalOpen:  Boolean(localStorage.getItem('isRegisterModalOpen')) || true,
+    isRegisterModalOpen: isClient ? JSON.parse(localStorage.getItem('isRegisterModalOpen') as string) || true : true,
     openRegisterModal: () => set({ isRegisterModalOpen: true }),
     closeRegisterModal: () => set({ isRegisterModalOpen: false }),
 }));
 
 export const useLoginModal = create<LoginModalStore>((set) => ({
-    isLoginModalOpen: Boolean(localStorage.getItem('isLoginModalOpen')) || false,
+    isLoginModalOpen: isClient ? Boolean(localStorage.getItem('isLoginModalOpen') as string) || false : false,
     openLoginModal: () => set({ isLoginModalOpen: true }),
     closeLoginModal: () => set({ isLoginModalOpen: false }),
 }));
@@ -48,7 +50,7 @@ export const useAuthStore = create<AuthState>()(
         user: null,
         setTokens: (accessToken, refreshToken) => set({ accessToken, refreshToken }),
         clearTokens: () => set({ accessToken: null, refreshToken: null }),
-        setUser: (user:IUser) => set({ user }),
+        setUser: (user: IUser) => set({ user }),
         clearUser: () => set({ user: null }),
     }), {
         name: 'auth-storage',
