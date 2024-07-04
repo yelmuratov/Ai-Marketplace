@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
       closeRegisterModal();
     }
   }
-  , []);
+  , [state.accessToken, state.refreshToken, closeLoginModal, closeRegisterModal]);
 
   useEffect(() => {
     const handleScroll = () => {
