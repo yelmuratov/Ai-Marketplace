@@ -1,8 +1,10 @@
+// context/AuthProvider.tsx
 'use client';
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthStore, useRegisterModal } from '../stores/auth-store'; // Import useRegisterModal
+import { useAuthStore, useRegisterModal } from '../stores/auth-store';
 import { register, login, userMe } from '../services/api';
+import useSessionTimeout from '@/hooks/useSessionTimeout'; // Import the hook
 
 interface AuthContextType {
   register: (username: string, email: string, password: string) => Promise<void>;
@@ -14,8 +16,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
-  const { setTokens, clearTokens, setUser, clearUser } = useAuthStore();
-  const { openRegisterModal } = useRegisterModal(); // Access openRegisterModal
+  const { setTokens, clearTokens, setUser, clearUser, refreshTokens, refreshToken } = useAuthStore();
+  const { openRegisterModal } = useRegisterModal();
 
   const handleRegister = async (username: string, email: string, password: string) => {
     await register(username, email, password);
@@ -34,15 +36,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     clearTokens();
     clearUser();
     localStorage.removeItem('auth-storage');
-    openRegisterModal(); // Open the register modal
+    openRegisterModal();
     router.push('/');
   };
+
+  useEffect(() => {
+    if (refreshToken) {
+      const refreshInterval = 23 * 60 * 60 * 1000; // 23 hours in milliseconds
+      const intervalId = setInterval(refreshTokens, refreshInterval);
+
+      return () => clearInterval(intervalId); // Cleanup on unmount
+    }
+  }, [refreshToken, refreshTokens]);
+
+  useSessionTimeout(); // Use the session timeout hook
 
   return (
     <AuthContext.Provider value={{ register: handleRegister, login: handleLogin, logout: handleLogout }}>
       {children}
     </AuthContext.Provider>
-  );
+  );  
 };
 
 export const useAuth = () => {

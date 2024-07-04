@@ -1,16 +1,14 @@
-// Home.tsx
-
 "use client";
 
 import Head from "next/head";
 import ThreeScene from "./components/Threescene";
-import { Toaster } from "react-hot-toast";
 import RegisterModal from "./modals/register-modal";
 import { useRegisterModal } from "@/stores/auth-store";
 import LoginModal from "./modals/login-modal";
+import Link from "next/link"; // Import Link component
 
 const Home: React.FC = () => {
-  const {isRegisterModalOpen} = useRegisterModal();
+  const { isRegisterModalOpen } = useRegisterModal();
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
@@ -46,8 +44,10 @@ const Home: React.FC = () => {
           Rent easy-to-use AI models to improve operations and customer service,
           while AI developers get paid for their creations
         </p>
+        <Link href="/joinlist" className="mt-4 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-300">
+            Get Started
+        </Link>
       </div>
-      <Toaster position="top-center" reverseOrder={false} />
       <RegisterModal />
       <LoginModal />
     </div>

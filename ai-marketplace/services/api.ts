@@ -1,5 +1,6 @@
 // services/api.ts
 import axios from 'axios';
+import { headers } from 'next/headers';
 import { z } from 'zod';
 
 const API_URL =  process.env.NEXT_PUBLIC_API_URL;
@@ -33,3 +34,12 @@ export const userMe = async (accessToken: string) => {
   });
   return response.data;
 };
+
+export const refreshToken = async (refreshToken: string) => {
+  const response = await axios.post(`${API_URL}/users/refresh-token/`, { 
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+   });
+  return response.data;
+}

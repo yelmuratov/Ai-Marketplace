@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useAuthStore, useLoginModal, useRegisterModal } from '../../stores/auth-store';
 import { useAuth } from '@/context/auth-contex';
+import { Toaster } from 'react-hot-toast';
 
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -139,6 +140,7 @@ const Navbar: React.FC = () => {
         </li> 
         <li><Link href="/contact" className="text-sm font-bold hover:text-gray-500">Contact</Link></li>
       </ul>
+      <Toaster position="top-center" reverseOrder={false} />
       {user ? (
         <div className='md:flex hidden items-center gap-4'>
           <span className="block text-white text-sm text-center my-4">{user.email}</span>
