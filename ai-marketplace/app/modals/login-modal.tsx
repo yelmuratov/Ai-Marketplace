@@ -25,6 +25,7 @@ import { useAuth } from "@/context/auth-contex";
 import { useAuthStore, useLoginModal, useRegisterModal } from "@/stores/auth-store";
 import { useEffect, useState } from "react";
 import { userMe } from "@/services/api";
+import toast from "react-hot-toast";
 
 interface Idata{
     access?: string;
@@ -74,8 +75,10 @@ const LoginModal = () => {
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     try {
       await authLogin(values.username, values.password);
+      toast.success("Login successful");
       closeLoginModal();
     } catch (error) {
+      toast.error("Email or password is incorrect. Please try again.");
       console.error(error);
     }
   };

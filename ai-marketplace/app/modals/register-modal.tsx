@@ -20,18 +20,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useAuth } from "@/context/auth-contex";
-import {useLoginModal, useRegisterModal } from "@/stores/auth-store";
+import { useLoginModal, useRegisterModal } from "@/stores/auth-store";
 import { useAuthStore } from '../../stores/auth-store';
+import toast from "react-hot-toast";
+import axios from "axios";
 
-const RegisterModal= () => {
-  const {register:authRegister} = useAuth();
+const RegisterModal = () => {
+  const { register: authRegister } = useAuth();
   const { setUser } = useAuthStore();
-  const {isRegisterModalOpen,closeRegisterModal} = useRegisterModal();
-  const {openLoginModal} = useLoginModal();
+  const { isRegisterModalOpen, closeRegisterModal } = useRegisterModal();
+  const { openLoginModal } = useLoginModal();
 
   const onClose = () => {
     console.log("close register modal");
-    closeRegisterModal();   
+    closeRegisterModal();
   };
 
   const form = useForm<z.infer<typeof registerSchema>>({
@@ -53,10 +55,19 @@ const RegisterModal= () => {
   const onSubmit = async (values: z.infer<typeof registerSchema>) => {
     try {
       await authRegister(values.username, values.email, values.password);
-      setUser({username: values.username, email: values.email});
+      setUser({ username: values.username, email: values.email });
       onClose();
       openLoginModal();
+      toast.success("Registered successfully");
     } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMsg = error.response.data;
+        for (const [key, value] of Object.entries(errorMsg)) {
+          toast.error(`${key}: ${value}`);
+        }
+      } else {
+        toast.error("Failed to register. Please try again.");
+      }
       console.error(error);
     }
   };
@@ -110,12 +121,12 @@ const RegisterModal= () => {
               )}
             />
             <div className="flex items-center justify-between">
-                <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Submitting..." : "Submit"}
-                </Button>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                    Already have an account <button type="button" onClick={goToLogin} className="font-medium text-primary-600 hover:underline dark:text-primary-500">Login</button>
-                </p>
+              </Button>
+              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                Already have an account <button type="button" onClick={goToLogin} className="font-medium text-primary-600 hover:underline dark:text-primary-500">Login</button>
+              </p>
             </div>
           </form>
         </Form>
