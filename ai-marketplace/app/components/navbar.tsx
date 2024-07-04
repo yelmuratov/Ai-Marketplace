@@ -8,55 +8,35 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { useAuthStore, useLoginModal, useRegisterModal } from '../../stores/auth-store';
 import { useAuth } from '@/context/auth-contex';
 
-interface IState {
-  accessToken: string;
-  refreshToken: string;
-  user: { username: string; email: string };
-}
-
-
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [darkBackground, setDarkBackground] = useState(true);
-  const [state, setState] = useState<IState>({
-    accessToken: '',
-    refreshToken: '',
-    user: { username: '', email: '' }
-  });
-  
-  const { logout: handleLogout } = useAuth();
-  const { closeRegisterModal,openRegisterModal } = useRegisterModal();
+  const { accessToken, user, setTokens, setUser } = useAuthStore();
+  const { logout } = useAuth(); // Use the logout from context
+  const { closeRegisterModal, openRegisterModal } = useRegisterModal();
   const { closeLoginModal } = useLoginModal();
-  const {setUser} = useAuthStore();
-
-  const logout = () => {
-    setState({ accessToken: '', refreshToken: '', user: { username: '', email: '' } });
-    localStorage.removeItem('auth-storage');
-    setUser({ username: '', email: '' });
-    handleLogout();
-    openRegisterModal();
-  }
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedState = localStorage.getItem('auth-storage');
       if (storedState) {
         try {
-          const parsedState = JSON.parse(storedState).state as IState;
-          setState(parsedState);
+          const parsedState = JSON.parse(storedState).state;
+          setTokens(parsedState.accessToken, parsedState.refreshToken);
+          setUser(parsedState.user);
         } catch (error) {
           console.error('Error parsing local storage data:', error);
         }
       }
     }
-  }, [state.accessToken, state.refreshToken]);
+  }, [setTokens, setUser]);
 
   useEffect(() => {
-    if (state.accessToken && state.refreshToken) {
+    if (accessToken) {
       closeLoginModal();
       closeRegisterModal();
     }
-  }, [state.accessToken, state.refreshToken, closeLoginModal, closeRegisterModal]);
+  }, [accessToken, closeLoginModal, closeRegisterModal]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -119,9 +99,9 @@ const Navbar: React.FC = () => {
               <Link href="/contact" className="p-4 text-sm font-semibold hover:bg-gray-100">Contact</Link>
             </div>
             <div className="mt-auto">
-              {state.user ? (
+              {user ? (
                 <div className='md:hidden block'>
-                  <span className="block text-black text-sm text-center my-4">{state.user.email}</span>
+                  <span className="block text-black text-sm text-center my-4">{user.email}</span>
                   <SheetTrigger asChild>
                     <Button onClick={logout} className="w-full text-center py-2 text-sm font-semibold">Logout</Button>
                   </SheetTrigger>
@@ -149,23 +129,22 @@ const Navbar: React.FC = () => {
         </li>
         <li><Link href="/models" className="text-sm font-bold hover:text-gray-500">AI Models</Link></li>
         <li className="text-gray-300">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" className="w-4 h-4 current-fill" viewBox="0 0 24 24">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" className="w-4 h-4 current-fill" viewBox="0 0 24 24"/>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-          </svg>
         </li>
         <li><Link href="/about" className="text-sm font-bold hover:text-gray-500">About Us</Link></li>
         <li className="text-gray-300">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" className="w-4 h-4 current-fill" viewBox="0 0 24 24">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" className="w-4 h-4 current-fill" viewBox="0 0 24 24"/>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-          </svg>
-        </li>
+        </li> 
         <li><Link href="/contact" className="text-sm font-bold hover:text-gray-500">Contact</Link></li>
       </ul>
-      {state.user && (
-                <div className='md:flex hidden items-center gap-4'>
-                  <span className="block text-white text-sm text-center my-4">{state.user.email}</span>
-                  <Button onClick={logout} className="w-full text-center py-2 text-sm font-semibold">Logout</Button>
-                </div>)}
+      {user ? (
+        <div className='md:flex hidden items-center gap-4'>
+          <span className="block text-white text-sm text-center my-4">{user.email}</span>
+          <Button onClick={logout} className="w-full text-center py-2 text-sm font-semibold">Logout</Button>
+        </div>
+      ) : null}
     </nav>
   );
 };
