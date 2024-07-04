@@ -1,9 +1,17 @@
+// Home.tsx
+
 "use client";
 
 import Head from "next/head";
 import ThreeScene from "./components/Threescene";
 import { Toaster } from "react-hot-toast";
+import RegisterModal from "./modals/register-modal";
+import { useRegisterModal } from "@/stores/auth-store";
+import LoginModal from "./modals/login-modal";
+
 const Home: React.FC = () => {
+  const {isRegisterModalOpen} = useRegisterModal();
+
   return (
     <div className="relative h-screen w-screen overflow-hidden">
       <Head>
@@ -30,16 +38,18 @@ const Home: React.FC = () => {
         <meta property="og:type" content="website" />
       </Head>
       <ThreeScene />
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10 pointer-events-none p-4">
+      <div className={`absolute inset-0 flex flex-col items-center justify-center text-white z-10 p-4 ${isRegisterModalOpen ? 'backdrop-blur-sm' : ''}`}>
         <h1 className="text-3xl lg:w-[1000px] text-center sm:text-4xl md:text-5xl lg:text-6xl mb-2 sm:mb-4">
-          A marketplace for small businesses to easily use ai tools
+          A marketplace for small businesses to easily use AI tools
         </h1>
         <p className="text-sm sm:text-lg md:text-xl lg:text-xl text-center max-w-2xl">
-          Rent easy-to-use ai models to improve operations and customer service,
-          while ai developers get paid for their creations
+          Rent easy-to-use AI models to improve operations and customer service,
+          while AI developers get paid for their creations
         </p>
       </div>
-      <Toaster position="top-center" reverseOrder={false}  />
+      <Toaster position="top-center" reverseOrder={false} />
+      <RegisterModal />
+      <LoginModal />
     </div>
   );
 };

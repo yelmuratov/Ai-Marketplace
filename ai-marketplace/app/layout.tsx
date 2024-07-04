@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/navbar";
-import SessionWrapper from "./components/sessionWrapper";
+import { AuthProvider } from "@/context/auth-contex";
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
 
@@ -19,17 +19,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SessionWrapper>
-      <html lang="en">
-      <body className={inter.className}>
-        <Navbar />
-        <main>
-        {children}
-        <SpeedInsights />
-          {/* <Dashboard /> */}
-        </main>
-      </body>
-    </html>
-    </SessionWrapper>
+      <AuthProvider>
+        <html lang="en">
+        <body className={inter.className}>
+          <Navbar />
+          <main>
+          {children}
+          <SpeedInsights />
+          </main>
+        </body>
+      </html>
+      </AuthProvider>
   );
 }

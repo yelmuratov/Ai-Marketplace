@@ -5,34 +5,42 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { getAuth, signOut } from 'firebase/auth';
-import { useRouter } from "next/navigation";
-import app from '@/config';
-import toast from 'react-hot-toast';
+import { useLoginModal, useRegisterModal } from '../../stores/auth-store';
+import { useAuth } from '@/context/auth-contex';
+
+interface IState {
+  accessToken: string;
+  refreshToken: string;
+  user: { username: string; email: string };
+}
 
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [darkBackground, setDarkBackground] = useState(true);
-  const [user, setUser] = useState<any>(null);
+  const {logout: handleLogout} = useAuth();
+  const storedState = localStorage.getItem('auth-storage');
+  let state: IState = { accessToken: '', refreshToken: '', user: { username: '', email: '' } };
 
-  const router = useRouter();
-  const auth = getAuth();
+  if (storedState) {
+    try {
+      state = JSON.parse(storedState).state as IState;
+    } catch (error) {
+      console.error('Error parsing local storage data:', error);
+    }
+  }
+
+  console.log(state);
+
+  const {closeRegisterModal} = useRegisterModal();
+  const {closeLoginModal} = useLoginModal();
 
   useEffect(() => {
-    const auth = getAuth(app);
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser({
-          displayName: user.displayName,
-          email: user.email,
-        });
-      } else {
-        setUser(null);
-      }
-    });
-
-    return unsubscribe;
-  }, []);
+    if(state.accessToken && state.refreshToken){
+      closeLoginModal();
+      closeRegisterModal();
+    }
+  }
+  , []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -65,19 +73,6 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      localStorage.removeItem('user');
-      setUser(null);
-      router.push('/');
-      toast.success('You have successfully signed out!', { duration: 3000 });
-    } catch (error) {
-      console.error(error);
-      toast.error('Failed to sign out!', { duration: 3000 });
-    }
-  };
-
   return (
     <nav
       className={`fixed lg:px-10 w-full z-20 px-4 py-4 flex justify-between items-center transition-colors duration-300 ${
@@ -108,16 +103,16 @@ const Navbar: React.FC = () => {
               <Link href="/contact" className="p-4 text-sm font-semibold hover:bg-gray-100">Contact</Link>
             </div>
             <div className="mt-auto">
-              {user ? (
+              {state.user ? (
                 <div className='md:hidden block'>
-                  <span className="block text-black text-sm text-center my-4">{user.email}</span>
+                  <span className="block text-black text-sm text-center my-4">{state.user.username}username</span>
                   <Button onClick={handleLogout} className="w-full text-sm font-semibold">Sign Out</Button>
                 </div>
               ) : (
                 <div className="flex gap-4">
                   <Link href="/signin" className="block w-full text-center py-2 text-sm font-semibold">Sign In</Link>
                   <Link href="/signup" className="block w-full text-center py-2 text-sm font-semibold">Sign Up</Link>
-                </div>
+                </div>  
               )}
             </div>
           </SheetContent>
@@ -148,21 +143,6 @@ const Navbar: React.FC = () => {
         </li>
         <li><Link href="/contact" className="text-sm font-bold hover:text-gray-500">Contact</Link></li>
       </ul>
-      {user ? (
-        <div className='flex items-center justify-center gap-4 hidden md:block mt-2'>
-          <span className="text-white text-sm">{user.email}</span>
-          <Button onClick={handleLogout} className="text-sm font-semibold ml-4">Sign Out</Button>
-        </div>
-      ) : (
-        <div className="flex gap-4 hidden md:block">
-          <div className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold rounded-xl transition duration-200">
-            <Link href="/signin">Sign In</Link>
-          </div>
-          <div className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200">
-            <Link href="/signup">Sign Up</Link>
-          </div>
-        </div>
-      )}
     </nav>
   );
 };
