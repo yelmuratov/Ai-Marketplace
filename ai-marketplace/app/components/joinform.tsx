@@ -17,15 +17,16 @@ type UserType = "business" | "developer";
 const FormComponent: React.FC = () => {
   const [userType, setUserType] = useState<UserType>("business");
   const [otherDescription, setOtherDescription] = useState<string>("");
-  const [services, setServices] = useState<string>("");
   const [aiSolution, setAiSolution] = useState<string>("");
   const [formData, setFormData] = useState({
     email: "",
     name: "",
-    businessName: "",
+    company_website: "",
     github: "",
     productDescription: "",
-    productLinks: ""
+    productLinks: "",
+    looking_for:"",
+    what_you_can: ""
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -42,57 +43,58 @@ const FormComponent: React.FC = () => {
     setOtherDescription(e.target.value);
   };
 
-  const handleServicesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setServices(e.target.value);
-  };
 
   const handleAiSolutionChange = (value: string) => {
     setAiSolution(value);
+    setFormData({ ...formData, looking_for: value });
   };
 
   const resetForm = () => {
     setUserType("business");
     setOtherDescription("");
-    setServices("");
     setAiSolution("");
     setFormData({
       email: "",
       name: "",
-      businessName: "",
+      company_website: "",
       github: "",
       productDescription: "",
-      productLinks: ""
+      productLinks: "",
+      looking_for:"", 
+      what_you_can: ""
     });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log("Form submitted"); // Added console.log
     try {
       if (userType === "business") {
         const response = await axios.post("https://marketplace.araltech.tech/api/whitelist/business/", {
           email: formData.email,
-          name: formData.name,
-          businessName: formData.businessName,
-          aiSolution,
+          company_name: formData.name,
+          company_website: formData.company_website,
+          looking_for: aiSolution,
           otherDescription: aiSolution === "other" ? otherDescription : undefined,
         });
-        console.log(response.data);
+        console.log(response.data); // Added console.log
         toast.success("Application submitted successfully!");
       } else if (userType === "developer") {
         const response = await axios.post("https://marketplace.araltech.tech/api/whitelist/dev/", {
-          email: formData.email,
-          name: formData.name,
-          github: formData.github,
-          productDescription: formData.productDescription,
-          productLinks: formData.productLinks,
-          services,
+          "email": formData.email,
+          "name": formData.name,
+          "github": formData.github,
+          "product_description": formData.productDescription,
+          "product_link": formData.productLinks,
+          "what_you_can": formData.what_you_can,
         });
+        console.log(response.data); // Added console.log
         toast.success("Application submitted successfully!");
-        console.log(response.data);
       }
       resetForm();
     } catch (error) {
+      console.log("Error:", error); // Added console.log
       if (axios.isAxiosError(error) && error.response) {
         const errorMsg = error.response.data;
         for (const [key, value] of Object.entries(errorMsg)) {
@@ -101,7 +103,6 @@ const FormComponent: React.FC = () => {
       } else {
         toast.error("Failed to submit the application. Please try again.");
       }
-      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -134,13 +135,13 @@ const FormComponent: React.FC = () => {
                     <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
+                    <Label htmlFor="name">Company Name</Label>
                     <Input id="name" name="name" value={formData.name} onChange={handleChange} required />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="businessName">Business Name</Label>
-                  <Input id="businessName" name="businessName" value={formData.businessName} onChange={handleChange} required />
+                  <Label htmlFor="company_website">Company website</Label>
+                  <Input id="company_website" name="company_website" type="url" value={formData.company_website} onChange={handleChange} required />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="businessNeed">What kind of AI solution are you looking for?</Label>
@@ -211,9 +212,9 @@ const FormComponent: React.FC = () => {
                   <Label htmlFor="services">Services Offered</Label>
                   <Textarea
                     id="services"
-                    name="services"
-                    value={services}
-                    onChange={handleServicesChange}
+                    name="what_you_can"
+                    value={formData.what_you_can}
+                    onChange={handleChange}
                     className="min-h-[100px]"
                   />
                 </div>
