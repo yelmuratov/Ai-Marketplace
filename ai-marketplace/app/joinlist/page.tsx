@@ -32,7 +32,7 @@ const JoinPage: React.FC = () => {
                         <div className="w-full lg:w-5/12 flex flex-col justify-center">
                             <h1 className="text-3xl lg:text-4xl font-bold leading-9 text-white pb-4">Join Our AI Marketplace</h1>
                             <p className="font-normal text-base leading-6 text-gray-200">
-                                Sign up as a Business or Developer to get started. Whether you're looking for AI solutions or providing them, we're here to help you connect and grow.
+                                Sign up as a Business or Developer to get started. Whether youre looking for AI solutions or providing them, we're here to help you connect and grow.
                             </p>
                         </div>
                         <div className="w-full lg:w-7/12">
