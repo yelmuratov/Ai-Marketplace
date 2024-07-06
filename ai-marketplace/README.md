@@ -101,6 +101,3 @@ If you have any questions, suggestions, or issues, please feel free to contact m
 - **Email**: [yelimuratovsalimbay@gmail.com](mailto:yelimuratovsalimbay@gmail.com)
 - **GitHub**: [Your GitHub Profile](https://github.com/yelmuratov)
 - **LinkedIn**: [Your LinkedIn Profile](https://www.linkedin.com/in/salimbayelmuratov/)
-
-I look forward to hearing from you!
-```
