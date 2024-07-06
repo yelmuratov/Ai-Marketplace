@@ -72,7 +72,7 @@ We welcome contributions to NeuroMark! If you'd like to contribute, please follo
 1. **Fork the repository**: Click the "Fork" button at the top right corner of this repository to create a copy of the project under your own GitHub account.
 2. **Clone the forked repository**: Clone the repository to your local machine using the command:
     ```bash
-    git clone https://github.com/your-username/neuro-mark.git
+    git clone https://github.com/yelmuratov/ai-marketplace.git
     ```
 3. **Create a new branch**: Create a new branch for your feature or bug fix. It is good practice to prefix your branch names with `feature/` or `bugfix/`.
     ```bash
