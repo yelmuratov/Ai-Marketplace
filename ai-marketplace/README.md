@@ -4,6 +4,8 @@
 
 NeuroMark is a marketplace designed for small businesses to easily access and utilize advanced AI tools. Business owners can rent AI models to improve their operations and customer service, while AI developers can monetize their models by offering them to a wider audience. This mutually beneficial system provides value to both business owners and AI developers.
 
+https://github.com/yelmuratov/Ai-Marketplace/blob/main/Screenshot%202024-07-06%20200508.png
+
 ## Features
 
 - **User-Friendly Marketplace**: Easily navigate and find AI tools tailored for small business needs.
