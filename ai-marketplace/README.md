@@ -23,8 +23,10 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 **Getting Started**
 
 ```bash
-git clone https://github.com/yelmuratov/ai-marketplace.git
-cd ai-marketplace.git
+1. git clone https://github.com/yelmuratov/ai-marketplace.git
+
+2. cd ai-marketplace.git
+
 npm run dev
 # or
 yarn dev
