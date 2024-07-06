@@ -94,6 +94,9 @@ We welcome contributions to NeuroMark! If you'd like to contribute, please follo
 
 Thank you for contributing!
 
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
 ## Contact
 
 If you have any questions, suggestions, or issues, please feel free to contact me:
