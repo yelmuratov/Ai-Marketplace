@@ -66,6 +66,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## Technologies Used
 
 - Next.js
+- Three.js (for animation in home page)
 - Shadcn
 - TypeScript
 - Tailwind CSS
