@@ -91,7 +91,7 @@ const LoginModal = () => {
 
   return (
     <Dialog open={isLoginModalOpen} onOpenChange={closeLoginModal}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="w-full max-w-md p-4 md:p-6 lg:p-8">
         <DialogHeader>
           <DialogTitle>Login</DialogTitle>
           <DialogDescription>Enter your account</DialogDescription>
@@ -124,13 +124,13 @@ const LoginModal = () => {
                 </FormItem>
               )}
             />
-            <div className="flex justify-between items-center">
-                <Button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? "Submitting..." : "Submit"}
-                </Button>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                      Don’t have an account yet? <button onClick={goToRegister} type="button"  className="font-medium text-primary-600 hover:underline dark:text-primary-500">Register</button>
-                  </p>
+            <div className="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0 sm:space-x-4">
+              <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </Button>
+              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                Don’t have an account yet? <button onClick={goToRegister} type="button"  className="font-medium text-primary-600 hover:underline dark:text-primary-500">Register</button>
+              </p>
             </div>
           </form>
         </Form>
