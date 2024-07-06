@@ -4,9 +4,6 @@
 
 NeuroMark is a marketplace designed for small businesses to easily access and utilize advanced AI tools. Business owners can rent AI models to improve their operations and customer service, while AI developers can monetize their models by offering them to a wider audience. This mutually beneficial system provides value to both business owners and AI developers.
 
-![Homepage]([https://neuromark.vercel.app/file-VZqhjb91bbwrgWLrXbqVkBhG](https://neuromark.vercel.app))
-![AI Models]([https://neuromark.vercel.app/file-2wQymOLhhp3ZwU9ximnVnBdc](https://neuromark.vercel.app/models))
-
 ## Features
 
 - **User-Friendly Marketplace**: Easily navigate and find AI tools tailored for small business needs.
