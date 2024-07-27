@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -101,6 +101,7 @@ const Navbar: React.FC = () => {
               <Link href="/" className="p-4 text-sm font-semibold hover:bg-gray-100">Home</Link>
               <Link href="/models" className="p-4 text-sm font-semibold hover:bg-gray-100">AI Models</Link>
               <Link href="/about" className="p-4 text-sm font-semibold hover:bg-gray-100">About Us</Link>
+              <Link href="/upload" className="p-4 text-sm font-semibold hover:bg-gray-100">Upload Model</Link>
               <Link href="/contact" className="p-4 text-sm font-semibold hover:bg-gray-100">Contact</Link>
             </div>
             <div className="mt-auto">
@@ -147,14 +148,25 @@ const Navbar: React.FC = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
           </svg>
         </li>
-        <li><Link href="/about" className="text-sm font-bold hover:text-gray-500">About Us</Link></li>
+        <li><Link href="/experts" className="text-sm font-bold hover:text-gray-500">AI Developers</Link></li>
         <li className="text-gray-300">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" className="w-4 h-4 current-fill" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
           </svg>
         </li>
-        <li><Link href="/contact" className="text-sm font-bold hover:text-gray-500">Contact</Link>
+        <li><Link href="/problems" className="text-sm font-bold hover:text-gray-500">Business Problems</Link></li>
+        <li className="text-gray-300">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" className="w-4 h-4 current-fill" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+          </svg>
         </li>
+        <li><Link href="/upload" className="text-sm font-bold hover:text-gray-500">Upload Model</Link></li>
+        <li className="text-gray-300">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" className="w-4 h-4 current-fill" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+          </svg>
+        </li>
+        <li><Link href="/contact" className="text-sm font-bold hover:text-gray-500">Contact</Link></li>
       </ul>
       {user ? (
         <div className='md:flex hidden items-center gap-4 bg-gradient-to-r from-purple-500 to-blue-500 p-2 rounded-lg shadow-lg'>
