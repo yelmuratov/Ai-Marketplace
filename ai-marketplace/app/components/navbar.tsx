@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [darkBackground, setDarkBackground] = useState(true);
   const { accessToken, user, setTokens, setUser } = useAuthStore();
-  const { logout } = useAuth(); // Use the logout from context
+  const { logout } = useAuth();
   const { closeRegisterModal } = useRegisterModal();
   const { closeLoginModal } = useLoginModal();
 
@@ -75,6 +75,17 @@ const Navbar: React.FC = () => {
     toast.success('Logged out successfully');
   }
 
+  const menuItems = (
+    <>
+      <Link href="/" className="p-4 text-sm font-semibold hover:bg-gray-100">Home</Link>
+      <Link href="/models" className="p-4 text-sm font-semibold hover:bg-gray-100">AI Models</Link>
+      <Link href="/experts" className="p-4 text-sm font-semibold hover:bg-gray-100">AI Developers</Link>
+      <Link href="/problems" className="p-4 text-sm font-semibold hover:bg-gray-100">Business problems</Link>
+      <Link href="/upload" className="p-4 text-sm font-semibold hover:bg-gray-100">Upload Model</Link>
+      <Link href="/contact" className="p-4 text-sm font-semibold hover:bg-gray-100">Contact</Link>
+    </>
+  );
+
   return (
     <nav
       className={`fixed lg:px-10 w-full z-20 px-4 py-4 flex justify-between items-center transition-colors duration-300 ${scrolled ? 'bg-white bg-opacity-30 backdrop-blur-md border-b border-black-800' : 'bg-transparent'
@@ -98,11 +109,7 @@ const Navbar: React.FC = () => {
               <SheetTitle>Menu</SheetTitle>
             </SheetHeader>
             <div className="flex flex-col mt-4">
-              <Link href="/" className="p-4 text-sm font-semibold hover:bg-gray-100">Home</Link>
-              <Link href="/models" className="p-4 text-sm font-semibold hover:bg-gray-100">AI Models</Link>
-              <Link href="/about" className="p-4 text-sm font-semibold hover:bg-gray-100">About Us</Link>
-              <Link href="/upload" className="p-4 text-sm font-semibold hover:bg-gray-100">Upload Model</Link>
-              <Link href="/contact" className="p-4 text-sm font-semibold hover:bg-gray-100">Contact</Link>
+              {menuItems}
             </div>
             <div className="mt-auto">
               {user ? (
