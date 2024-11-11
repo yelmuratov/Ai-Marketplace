@@ -1,6 +1,6 @@
 # NeuroMark
 
-https://github.com/yelmuratov/Ai-Marketplace/blob/main/Screenshot%202024-07-06%20200508.png
+![AI Marketplace Screenshot](https://github.com/yelmuratov/Ai-Marketplace/blob/main/Screenshot%202024-07-06%20200508.png)
 
 ## Project Description
 
