@@ -104,5 +104,5 @@ This project is licensed under the MIT License. See the LICENSE file for details
 If you have any questions, suggestions, or issues, please feel free to contact me:
 
 - **Email**: [yelimuratovsalimbay@gmail.com](mailto:yelimuratovsalimbay@gmail.com)
-- **GitHub**: [Your GitHub Profile](https://github.com/yelmuratov)
-- **LinkedIn**: [Your LinkedIn Profile](https://www.linkedin.com/in/salimbayelmuratov/)
+- **GitHub**: [GitHub](https://github.com/yelmuratov)
+- **LinkedIn**: [LinkedIn](https://www.linkedin.com/in/salimbayelmuratov/)
